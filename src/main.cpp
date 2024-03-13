@@ -1,55 +1,73 @@
-#include "raylib-cpp.hpp"
-
-#include "imgui.h"
-#include "rlImGui.h"
+#include "raylib.h"
+#include "game/game.h"
+#include "game/ui.h"
+#include "game/sounds.h"
 
 int main() {
-    int screenWidth = 1280;
-    int screenHeight = 800;
+    // CONFIGURATION
+    static const int screenWidth = 800;
+    static const int screenHeight = 600;
+    static const int targetFPS = 60;
+    const char *windowsTitle = "Pong with Raylib";
 
-    raylib::Window window(
-        screenWidth,
-        screenHeight,
-        "MyGame - basic window",
-        FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE
-        );
+    // INITIALIZATION
+    SetTraceLogLevel(LOG_INFO);
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
+    InitWindow(screenWidth, screenHeight, windowsTitle);
+    SetTargetFPS(targetFPS); // Set desired framerate (frames-per-second)
+    InitAudioDevice();
+    SoundsLoadAll();
 
-    raylib::Texture logo("resources/raylib_logo.png");
+    // SHADERS
+    const RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
+    const Shader shader = LoadShader(0, "resources/crt.fs");
+    const Color backgroundColor = ColorFromHSV(207, 0.47f, 0.15f);
 
-    // init imgui
-    rlImGuiSetup(true);
+    Game game = GameCreate();
 
-    SetTargetFPS(60);
-
-    while (!window.ShouldClose())
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        // UPDATE
+        SetWindowTitle(TextFormat("%s FPS - %d", windowsTitle, GetFPS()));
+
+        // EVENTS
+        if (!GameHasWinner(&game)) {
+            GameProcessEvents(&game);
+        } else {
+            GameReset(&game);
+        }
+
+        ClearBackground(backgroundColor);
+
+        // DRAW
         BeginDrawing();
+        BeginTextureMode(target);
+        ClearBackground(backgroundColor);
+        GameDraw(&game);
+        EndTextureMode();
 
-        window.ClearBackground(RAYWHITE);
 
-        // start ImGui Conent
-        rlImGuiBegin();
+        BeginShaderMode(shader);
+        DrawTextureRec(target.texture,
+                       (Rectangle) {0, 0, (float) target.texture.width, (float) -target.texture.height},
+                       (Vector2) {0, 0},
+                       WHITE);
+        EndShaderMode();
 
-        // show ImGui Content
-        bool open = true;
-        ImGui::ShowDemoWindow(&open);
+        UIDrawScoreBoard(&game.leftPaddle, &game.rightPaddle);
 
-        // end ImGui Content
-        rlImGuiEnd();
-
-        DrawText("Congrats! You created your first window!", 190, 50, 20, LIGHTGRAY);
-
-        // Object methods.
-        logo.Draw(
-            screenWidth / 2 - logo.GetWidth() / 2 - 200,
-            screenHeight / 2 - logo.GetHeight() / 2);
+        if (GameHasWinner(&game)) {
+            GameProcessWonState(&game);
+        }
 
         EndDrawing();
     }
 
-    rlImGuiShutdown();
-
-    // UnloadTexture() and CloseWindow() are called automatically.
+    // DE-INITIALIZATION
+    CloseAudioDevice();
+    UnloadRenderTexture(target);
+    CloseWindow();
 
     return 0;
 }
