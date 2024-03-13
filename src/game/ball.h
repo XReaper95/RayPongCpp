@@ -6,31 +6,43 @@
 #define RAY_PONG_C_SRC_ENTITIES_BALL_H_
 
 #include "paddle.h"
+#include "raylib-cpp.hpp"
 
-typedef struct {
-    Vector2 pos;
-    float radius;
-    Color color;
-    bool frozen;
-    double velX;
-    double velY;
+class Ball
+{
+public:
+    Ball();
 
-    bool screenEdgeCollision;
-    bool paddleSideCollision;
-    bool paddleTBCollision;
-    bool collideWithPaddleEnabled;
-} Ball;
+    void Draw() const;
+    void ProcessMovement();
+    void CheckBorderCollision();
+    void CheckPaddleCollision(const Paddle *p);
 
-Ball BallCreate();
+    [[nodiscard]] raylib::Vector2 m_position() const
+    {
+        return mPosition;
+    }
 
-void BallStateReset(Ball *b);
+    [[nodiscard]] float m_radius() const
+    {
+        return mRadius;
+    }
 
-void BallDraw(const Ball *b);
+    [[nodiscard]] bool m_collide_with_paddle_enabled() const
+    {
+        return mCollideWithPaddleEnabled;
+    }
 
-void BallCheckBorderCollision(Ball *b);
+private:
+    raylib::Vector2 mPosition;
+    float mRadius;
+    raylib::Color mColor;
+    raylib::Vector2 mVelocity;
+    bool mFrozen = true;
+    bool mScreenEdgeCollision = false;
+    bool mPaddleSideCollision = false;
+    bool mPaddleTBCollision = false;
+    bool mCollideWithPaddleEnabled = false;
+};
 
-void BallCheckPaddleCollision(Ball *b, const Paddle *p);
-
-void BallProcessMovement(Ball *b);
-
-#endif //RAY_PONG_C_SRC_ENTITIES_BALL_H_
+#endif // RAY_PONG_C_SRC_ENTITIES_BALL_H_

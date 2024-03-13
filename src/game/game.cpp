@@ -2,16 +2,16 @@
 // Created by Luis on 13/04/2021.
 //
 
-#include <stddef.h>
-
 #include "game.h"
 #include "sounds.h"
 #include "ui.h"
 
 #define GAME_MAX_POINTS 5
 
-static bool CheckWinner(const Paddle *p) {
-    if (p->score >= GAME_MAX_POINTS) {
+static bool CheckWinner(const Paddle *p)
+{
+    if (p->m_score() >= GAME_MAX_POINTS)
+    {
         SoundsPlayGameWon();
         return true;
     }
@@ -19,89 +19,104 @@ static bool CheckWinner(const Paddle *p) {
     return false;
 }
 
-static void ResetGame(Game *game) {
-    game->winner = NULL;
-    BallStateReset(&game->ball);
-    PaddleResetState(&game->leftPaddle, true);
-    PaddleResetState(&game->rightPaddle, false);
-    SoundsStopScore();
+static void ResetGame(Game *game)
+{
+    game->winner = nullptr;
+    game->ball = Ball();
+    game->leftPaddle.Reset(), game->rightPaddle.Reset(), SoundsStopScore();
     SoundsStopGameWon();
 }
 
-static void UpdateScore(Game *game) {
-    const float ballX = game->ball.pos.x;
-    const float ballRadius = game->ball.radius;
-    const float screenW = (float) GetScreenWidth();
+static void UpdateScore(Game *game)
+{
+    const float ballX = game->ball.m_position().x;
+    const float ballRadius = game->ball.m_radius();
+    const auto screenW = static_cast<float>(GetScreenWidth());
     bool scored = false;
 
     // right score
-    if (ballX < 0 - ballRadius - 30) {
+    if (ballX < 0 - ballRadius - 30)
+    {
         scored = true;
-        PaddleUpdateScore(&game->rightPaddle);
-        if (CheckWinner(&game->rightPaddle)) {
+        game->rightPaddle.UpdateScore();
+        if (CheckWinner(&game->rightPaddle))
+        {
             game->winner = &game->rightPaddle;
         }
     }
 
     // left score
-    if (ballX > screenW + ballRadius + 30) {
+    if (ballX > screenW + ballRadius + 30)
+    {
         scored = true;
-        PaddleUpdateScore(&game->leftPaddle);
-        if (CheckWinner(&game->leftPaddle)) {
+        game->leftPaddle.UpdateScore();
+        if (CheckWinner(&game->leftPaddle))
+        {
             game->winner = &game->leftPaddle;
         }
     }
 
     // reset ball position
-    if (scored) {
+    if (scored)
+    {
         SoundsPlayScore();
-        BallStateReset(&game->ball);
+        game->ball = Ball();
     }
 }
 
-Game GameCreate() {
-    return (Game) {
-            .leftPaddle = PaddleCreate("Player 1", BLUE, true, &SCHEME1),
-            .rightPaddle = PaddleCreate("Player 2", RED, false, &SCHEME2),
-            .ball = BallCreate()
-    };
+Game GameCreate()
+{
+    return (Game){
+        .leftPaddle = Paddle("Player 1", BLUE, true),
+        .rightPaddle = Paddle("Player 2", RED, false),
+        .ball = Ball()};
 }
 
-void GameProcessEvents(Game *game) {
-    PaddleProcessInput(&game->leftPaddle);
-    PaddleProcessInput(&game->rightPaddle);
+void GameProcessEvents(Game *game)
+{
+    game->leftPaddle.ProcessInput();
+    game->rightPaddle.ProcessInput();
 
-    BallCheckBorderCollision(&game->ball);
+    game->ball.CheckBorderCollision();
 
-    if (!game->ball.collideWithPaddleEnabled) {
-        BallCheckPaddleCollision(&game->ball, &game->leftPaddle);
-        BallCheckPaddleCollision(&game->ball, &game->rightPaddle);
+    if (!game->ball.m_collide_with_paddle_enabled())
+    {
+        game->ball.CheckPaddleCollision(&game->leftPaddle);
+        game->ball.CheckPaddleCollision(&game->rightPaddle);
     }
 
-    BallProcessMovement(&game->ball);
+    game->ball.ProcessMovement();
+
     UpdateScore(game);
 }
 
-void GameDraw(const Game *game) {
+void GameDraw(const Game *game)
+{
     UIDrawGameField();
 
-    PaddleDraw(&game->leftPaddle);
-    PaddleDraw(&game->rightPaddle);
-    BallDraw(&game->ball);
+    game->leftPaddle.Draw();
+    game->rightPaddle.Draw();
+    game->ball.Draw();
 }
 
-void GameReset(Game *game) {
-    if (GameHasWinner(game) && IsKeyPressed(KEY_SPACE)) {
+void GameReset(Game *game)
+{
+    if (GameHasWinner(game) && IsKeyPressed(KEY_SPACE))
+    {
         ResetGame(game);
     }
 }
 
-void GameProcessWonState(Game *game) {
+void GameProcessWonState(Game *game)
+{
     Paddle *p;
 
-    if (game->winner == &game->leftPaddle) {
+    if (game->winner == &game->leftPaddle)
+    {
         p = &game->leftPaddle;
-    } else {
+    }
+    else
+    {
         p = &game->rightPaddle;
     }
 
@@ -109,4 +124,7 @@ void GameProcessWonState(Game *game) {
     UIDrawResetMessage();
 }
 
-bool GameHasWinner(const Game *game) { return game->winner != NULL; }
+bool GameHasWinner(const Game *game)
+{
+    return game->winner != nullptr;
+}

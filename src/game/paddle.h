@@ -6,40 +6,57 @@
 #define RAYLIB_C_SRC_PLAYER_H_
 
 #include "raylib.h"
+#include <Color.hpp>
+#include <Vector2.hpp>
 
-typedef struct {
-    KeyboardKey UP_KEY;
-    KeyboardKey DOWN_KEY;
-} ControlScheme;
+#include <string>
 
-static const ControlScheme SCHEME1 = {
-        .UP_KEY = KEY_W,
-        .DOWN_KEY = KEY_S,
+class Paddle
+{
+public:
+    Paddle(std::string_view name, raylib::Color color, bool isLeftPaddle);
+
+    void Reset();
+    void UpdateScore();
+    void Draw() const;
+    void ProcessInput();
+
+private:
+    std::string mName;
+
+public:
+    [[nodiscard]] const raylib::Vector2 &m_position() const
+    {
+        return mPosition;
+    }
+
+    [[nodiscard]] const raylib::Vector2 &m_size() const
+    {
+        return mSize;
+    }
+
+    [[nodiscard]] const std::string &m_name() const
+    {
+        return mName;
+    }
+
+    [[nodiscard]] const raylib::Color &m_color() const
+    {
+        return mColor;
+    }
+
+    [[nodiscard]] int m_score() const
+    {
+        return mScore;
+    }
+
+private:
+    raylib::Vector2 mPosition;
+    const raylib::Vector2 mSize;
+    const raylib::Color mColor;
+    int mScore;
+    const KeyboardKey mKeyUp;
+    const KeyboardKey mKeyDown;
 };
 
-static const ControlScheme SCHEME2 = {
-        .UP_KEY = KEY_UP,
-        .DOWN_KEY = KEY_DOWN,
-};
-
-typedef struct {
-    const char *name;
-    Vector2 pos;
-    Vector2 size;
-    Color color;
-    int score;
-    const ControlScheme *controlScheme;
-} Paddle;
-
-Paddle PaddleCreate(const char *name, Color color, bool isLeftPaddle, const ControlScheme *scheme);
-
-void PaddleResetState(Paddle *p, bool isLeftPaddle);
-
-void PaddleUpdateScore(Paddle *p);
-
-void PaddleDraw(const Paddle *p);
-
-void PaddleProcessInput(Paddle *p);
-
-
-#endif //RAYLIB_C_SRC_PLAYER_H_
+#endif // RAYLIB_C_SRC_PLAYER_H_

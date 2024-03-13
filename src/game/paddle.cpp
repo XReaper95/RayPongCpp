@@ -3,47 +3,53 @@
 //
 #include "paddle.h"
 
-static const float paddleFixedHeight = 100.0f;
-static const float paddleFixedWidth = 30.0f;
-static const float paddleWidthMargin = 15.0f;
-static const float paddleMovementFactor = 300.0f;
+namespace
+{
+constexpr float paddleFixedHeight = 100.0f;
+constexpr float paddleFixedWidth = 30.0f;
+constexpr float paddleWidthMargin = 15.0f;
+constexpr float paddleMovementFactor = 300.0f;
+} // namespace
 
-Paddle PaddleCreate(const char *name, const Color color, const bool isLeftPaddle, const ControlScheme *scheme) {
-    Paddle p = {
-            .name = name,
-            .pos = { 0, 0 },
-            .size = { paddleFixedWidth, paddleFixedHeight },
-            .color = color,
-            .controlScheme = scheme,
-    };
+Paddle::Paddle(const std::string_view name, const raylib::Color color, const bool isLeftPaddle)
+    : mName{name},
+      mSize{paddleFixedWidth, paddleFixedHeight},
+      mColor{color},
+      mScore{0},
+      mKeyUp{isLeftPaddle ? KEY_W : KEY_I},
+      mKeyDown{isLeftPaddle ? KEY_S : KEY_K}
+{
+    mPosition = Vector2{
+        isLeftPaddle ? paddleWidthMargin : static_cast<float>(GetScreenWidth()) - paddleWidthMargin - paddleFixedWidth,
+        static_cast<float>(GetScreenHeight()) / 2 - paddleFixedHeight / 2};
 
-    PaddleResetState(&p, isLeftPaddle);
-
-    return p;
+    TraceLog(LOG_INFO, "%s position: {%f, %f}", mName.c_str(), mPosition.x, mPosition.y);
 }
 
-void PaddleResetState(Paddle *p, const bool isLeftPaddle) {
-    if (isLeftPaddle) {
-        p->pos.x = paddleWidthMargin;
-    } else {
-        p->pos.x = (float) GetScreenWidth() - paddleWidthMargin - paddleFixedWidth;
+void Paddle::Reset()
+{
+    mPosition.y = static_cast<float>(GetScreenHeight()) / 2 - paddleFixedHeight / 2;
+    mScore = 0;
+}
+
+void Paddle::Draw() const
+{
+    DrawRectangleV(mPosition, mSize, mColor);
+}
+
+void Paddle::ProcessInput()
+{
+    if (IsKeyDown(mKeyUp) && mPosition.y > 0.0f)
+    { // UP
+        mPosition.y -= paddleMovementFactor * GetFrameTime();
     }
-    p->pos.y = (float) GetScreenHeight() / 2 - paddleFixedHeight / 2;
-
-    p->score = 0;
-}
-
-void PaddleDraw(const Paddle *p) {
-    DrawRectangleV(p->pos, p->size, p->color);
-}
-
-void PaddleProcessInput(Paddle *p) {
-    if (IsKeyDown(p->controlScheme->UP_KEY) && p->pos.y > 0.0f) { // UP
-        p->pos.y -= paddleMovementFactor * GetFrameTime();
-    }
-    if (IsKeyDown(p->controlScheme->DOWN_KEY) && p->pos.y + p->size.y < (float) GetScreenHeight()) { // Down
-        p->pos.y += paddleMovementFactor * GetFrameTime();
+    if (IsKeyDown(mKeyDown) && mPosition.y + mSize.y < static_cast<float>(GetScreenHeight()))
+    { // Down
+        mPosition.y += paddleMovementFactor * GetFrameTime();
     }
 }
 
-void PaddleUpdateScore(Paddle *p) { p->score++; }
+void Paddle::UpdateScore()
+{
+    mScore++;
+}

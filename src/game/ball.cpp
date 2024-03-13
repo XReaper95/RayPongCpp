@@ -5,138 +5,132 @@
 #include "ball.h"
 #include "sounds.h"
 
-#include <math.h>
+#include <algorithm>
 
+namespace
+{
+constexpr int forwardArcAngle = 110;
+constexpr float fixedBallRadius = 15.0f;
+constexpr float fixedBallSpeedFactor = 530.0;
 
-static const float fixedBallRadius = 15.0f;
-static const int maxInitialArcAngleDeg = 45;
-static const double fixedBallSpeedFactor = 530.0;
-
-static double AngleToRadians(const int angle) {
-    const double resultInRadians = (double) angle * PI / 180;
-    return resultInRadians;
+float DegreesToRadians(const float angle)
+{
+    return angle * DEG2RAD;
 }
 
-static double GetInitialRandomAngle() {
-    int result;
-    const int selectRightOrLeft = GetRandomValue(0, 1);
+float GetInitialRandomAngle()
+{
+    int angle;
+    constexpr int halfForwardArc = forwardArcAngle / 2;
 
-    if (selectRightOrLeft == 0) {
-        result = GetRandomValue(180 - maxInitialArcAngleDeg, 180 + maxInitialArcAngleDeg);
-    } else {
-        result = GetRandomValue(360 - maxInitialArcAngleDeg, 360 + maxInitialArcAngleDeg);
+    if (GetRandomValue(0, 1) == 0)
+    {
+        angle = GetRandomValue(180 - halfForwardArc, 180 + halfForwardArc);
+    }
+    else
+    {
+        angle = GetRandomValue(-halfForwardArc, halfForwardArc);
     }
 
-    return AngleToRadians(result);
+    return DegreesToRadians(static_cast<float>(angle));
+}
+} // namespace
+
+Ball::Ball()
+    : mPosition{static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2},
+      mRadius{fixedBallRadius},
+      mColor{YELLOW}
+{
+    const float initialAngle = GetInitialRandomAngle();
+    mVelocity = Vector2{fixedBallSpeedFactor * cos(initialAngle), fixedBallSpeedFactor * sin(initialAngle)};
 }
 
-Ball BallCreate() {
-    const double initialAngle = GetInitialRandomAngle();
-    Ball b = {
-            .pos = { 0, 0 },
-            .radius = fixedBallRadius,
-            .color = YELLOW,
-            .frozen = false,
-            .velX = fixedBallSpeedFactor * cos(initialAngle),
-            .velY = fixedBallSpeedFactor * sin(initialAngle),
-    };
-
-    BallStateReset(&b);
-
-    return b;
+void Ball::Draw() const
+{
+    DrawCircleV(mPosition, mRadius, mColor);
 }
 
-void BallStateReset(Ball *b) {
-    b->pos.x = (float) GetScreenWidth() / 2;
-    b->pos.y = (float) GetScreenHeight() / 2;
-    b->frozen = true;
-    b->screenEdgeCollision = false;
-    b->paddleSideCollision = false;
-    b->paddleTBCollision = false;
-    b->collideWithPaddleEnabled = false;
-}
-
-void BallDraw(const Ball *b) {
-    DrawCircleV(b->pos, b->radius, b->color);
-}
-
-void BallProcessMovement(Ball *b) {
-    if (IsKeyPressed(KEY_SPACE) && b->frozen) {
+void Ball::ProcessMovement()
+{
+    if (IsKeyPressed(KEY_SPACE) && mFrozen)
+    {
         SoundsStopScore();
         SoundsPlayWhistle();
-        b->frozen = false;
+        mFrozen = false;
     }
 
-    if (!b->frozen) {
-        const double velocityX = b->velX * GetFrameTime();
-        const double velocityY = b->velY * GetFrameTime();
+    if (!mFrozen)
+    {
+        const raylib::Vector2 deltaVelocity = {mVelocity.x * GetFrameTime(), mVelocity.y * GetFrameTime()};
 
-        if (b->screenEdgeCollision) {
+        if (mScreenEdgeCollision)
+        {
             SoundsPlayBorderHit();
-            b->velY *= -1.0f;
-            b->screenEdgeCollision = false;
+            mVelocity.y *= -1.0f;
+            mScreenEdgeCollision = false;
         }
-        if (b->paddleSideCollision) {
+        if (mPaddleSideCollision)
+        {
             SoundsPlayPaddleHit();
-            b->velX *= -1.0f;
-            b->paddleSideCollision = false;
-
+            mVelocity.x *= -1.0f;
+            mPaddleSideCollision = false;
         }
-        if (b->paddleTBCollision) {
+        if (mPaddleTBCollision)
+        {
             SoundsPlayPaddleHit();
-            b->velY *= -1.0f;
-            b->paddleTBCollision = false;
-            b->collideWithPaddleEnabled = true;
+            mVelocity.y *= -1.0f;
+            mPaddleTBCollision = false;
+            mCollideWithPaddleEnabled = true;
         }
 
-        b->pos.x += (float) velocityX;
-        b->pos.y += (float) velocityY;
+        mPosition += deltaVelocity;
     }
 }
 
-void BallCheckBorderCollision(Ball *b) {
-    const double velocityY = b->velY * GetFrameTime();
+void Ball::CheckBorderCollision()
+{
+    const double velocityY = mVelocity.y * GetFrameTime();
 
     // collide with bottom border
-    if (b->pos.y + b->radius + velocityY >= (float) GetScreenHeight()) {
-        b->screenEdgeCollision = true;
+    if (mPosition.y + mRadius + velocityY >= GetScreenHeight())
+    {
+        mScreenEdgeCollision = true;
     }
 
     // collide with top border
-    if (b->pos.y - b->radius + velocityY < 0) {
-        b->screenEdgeCollision = true;
+    if (mPosition.y - mRadius + velocityY < 0)
+    {
+        mScreenEdgeCollision = true;
     }
-
 }
 
-void BallCheckPaddleCollision(Ball *b, const Paddle *p) {
-    const float velocityX = (float) b->velX * GetFrameTime();
-    const float velocityY = (float) b->velY * GetFrameTime();
+void Ball::CheckPaddleCollision(const Paddle *p)
+{
+    const float velocityX = mVelocity.x * GetFrameTime();
+    const float velocityY = mVelocity.y * GetFrameTime();
 
-    const float ballX = b->pos.x + velocityX;
-    const float ballY = b->pos.y + velocityY;
-    const float paddleLeftSide = p->pos.x;
-    const float paddleRightSide = p->pos.x + p->size.x;
-    const float paddleTopSide = p->pos.y;
-    const float paddleBottomSide = p->pos.y + p->size.y;
+    const float ballX = mPosition.x + velocityX;
+    const float ballY = mPosition.y + velocityY;
+    const float paddleLeftSide = p->m_position().x;
+    const float paddleRightSide = p->m_position().x + p->m_size().x;
+    const float paddleTopSide = p->m_position().y;
+    const float paddleBottomSide = p->m_position().y + p->m_size().y;
 
-    float testX = ballX;
-    float testY = ballY;
-
-    if (ballX < paddleLeftSide) testX = paddleLeftSide;
-    else if (ballX > paddleRightSide) testX = paddleRightSide;
-    if (ballY < paddleTopSide) testY = paddleTopSide;
-    else if (ballY > paddleBottomSide) testY = paddleBottomSide;
+    const float testX = std::clamp(ballX, paddleLeftSide, paddleRightSide);
+    const float testY = std::clamp(ballY, paddleTopSide, paddleBottomSide);
 
     const float distX = ballX - testX;
     const float distY = ballY - testY;
-    const float distance = sqrtf(distX * distX + distY * distY);
 
-    if (distance <= b->radius) {
-        if (distY == 0.0f) {
-            b->paddleSideCollision = true;
-        } else {
-            b->paddleTBCollision = true;
+    if (const float distance = sqrt(distX * distX + distY * distY); distance <= mRadius)
+    {
+        if (distY == 0.0f)
+        {
+            mPaddleSideCollision = true;
+        }
+        else
+        {
+            mPaddleTBCollision = true;
         }
     }
 }
