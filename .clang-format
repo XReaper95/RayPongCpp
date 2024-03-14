@@ -10,4 +10,5 @@ AllowAllArgumentsOnNextLine: false
 PackConstructorInitializers: Never
 AllowAllParametersOfDeclarationOnNextLine: false
 AlignAfterOpenBracket: AlwaysBreak
+PointerAlignment: Left
 ---
