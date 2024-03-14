@@ -3,7 +3,7 @@
 //
 
 #include "ball.h"
-#include "sounds.h"
+#include "SoundManager.h"
 
 #include <algorithm>
 
@@ -54,8 +54,8 @@ void Ball::ProcessMovement()
 {
     if (IsKeyPressed(KEY_SPACE) && mFrozen)
     {
-        SoundsStopScore();
-        SoundsPlayWhistle();
+        SoundManager::instance()->stopScore();
+        SoundManager::instance()->playWhistle();
         mFrozen = false;
     }
 
@@ -65,7 +65,7 @@ void Ball::ProcessMovement()
 
         if (mScreenEdgeCollision)
         {
-            SoundsPlayBorderHit();
+            SoundManager::instance()->playBorderHit();
             mVelocity.y *= -1.0f;
             mScreenEdgeCollision = false;
         }
@@ -77,7 +77,7 @@ void Ball::ProcessMovement()
         }
         if (mPaddleTBCollision)
         {
-            SoundsPlayPaddleHit();
+            SoundManager::instance()->playPaddleHit();
             mVelocity.y *= -1.0f;
             mPaddleTBCollision = false;
             mCollideWithPaddleEnabled = true;

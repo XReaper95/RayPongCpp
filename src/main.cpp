@@ -1,3 +1,6 @@
+#include "game/SoundManager.h"
+#include "game/game.h"
+#include "game/ui.h"
 #include "raylib.h"
 #include "game/game.h"
 #include "game/ui.h"
@@ -16,7 +19,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, windowsTitle);
     SetTargetFPS(targetFPS); // Set desired framerate (frames-per-second)
     InitAudioDevice();
-    SoundsLoadAll();
+    SoundManager::instance(); // load all the sounds
 
     // SHADERS
     const RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);

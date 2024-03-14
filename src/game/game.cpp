@@ -3,7 +3,7 @@
 //
 
 #include "game.h"
-#include "sounds.h"
+#include "SoundManager.h"
 #include "ui.h"
 
 #define GAME_MAX_POINTS 5
@@ -12,7 +12,7 @@ static bool CheckWinner(const Paddle *p)
 {
     if (p->m_score() >= GAME_MAX_POINTS)
     {
-        SoundsPlayGameWon();
+        SoundManager::instance()->playGameWon();
         return true;
     }
 
@@ -23,8 +23,10 @@ static void ResetGame(Game *game)
 {
     game->winner = nullptr;
     game->ball = Ball();
-    game->leftPaddle.Reset(), game->rightPaddle.Reset(), SoundsStopScore();
-    SoundsStopGameWon();
+    game->leftPaddle.Reset();
+    game->rightPaddle.Reset();
+    SoundManager::instance()->stopScore();
+    SoundManager::instance()->stopGameWon();
 }
 
 static void UpdateScore(Game *game)
@@ -59,7 +61,7 @@ static void UpdateScore(Game *game)
     // reset ball position
     if (scored)
     {
-        SoundsPlayScore();
+        SoundManager::instance()->playScore();
         game->ball = Ball();
     }
 }
