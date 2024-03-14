@@ -104,16 +104,16 @@ void Ball::checkBorderCollision()
     }
 }
 
-void Ball::checkPaddleCollision(const Paddle* p)
+void Ball::checkPaddleCollision(const Paddle& p)
 {
     const raylib::Vector2 delta_velocity{m_Velocity.x * GetFrameTime(), m_Velocity.y * GetFrameTime()};
 
     const float ball_x = m_Position.x + delta_velocity.x;
     const float ball_y = m_Position.y + delta_velocity.y;
-    const float paddle_left_side = p->position().x;
-    const float paddle_right_side = p->position().x + p->size().x;
-    const float paddle_top_side = p->position().y;
-    const float paddle_bottom_side = p->position().y + p->size().y;
+    const float paddle_left_side = p.position().x;
+    const float paddle_right_side = p.position().x + p.size().x;
+    const float paddle_top_side = p.position().y;
+    const float paddle_bottom_side = p.position().y + p.size().y;
 
     const float test_x = std::clamp(ball_x, paddle_left_side, paddle_right_side);
     const float test_y = std::clamp(ball_y, paddle_top_side, paddle_bottom_side);

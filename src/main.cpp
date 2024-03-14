@@ -1,6 +1,6 @@
+#include "game/Game.h"
 #include "game/SoundManager.h"
 #include "game/UI.h"
-#include "game/game.h"
 #include "raylib.h"
 
 int main() {
@@ -23,7 +23,7 @@ int main() {
     const Shader shader = LoadShader(0, "resources/crt.fs");
     const Color backgroundColor = ColorFromHSV(207, 0.47f, 0.15f);
 
-    Game game = GameCreate();
+    auto game = Game();
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -32,10 +32,10 @@ int main() {
         SetWindowTitle(TextFormat("%s FPS - %d", windowsTitle, GetFPS()));
 
         // EVENTS
-        if (!GameHasWinner(&game)) {
-            GameProcessEvents(&game);
+        if (!game.hasWinner()) {
+            game.processEvents();
         } else {
-            GameReset(&game);
+            game.reset();
         }
 
         ClearBackground(backgroundColor);
@@ -44,7 +44,7 @@ int main() {
         BeginDrawing();
         BeginTextureMode(target);
         ClearBackground(backgroundColor);
-        GameDraw(&game);
+        game.draw();
         EndTextureMode();
 
 
@@ -55,10 +55,10 @@ int main() {
                        WHITE);
         EndShaderMode();
 
-        UI::drawScoreBoard(&game.leftPaddle, &game.rightPaddle);
+        UI::drawScoreBoard(game.leftPaddle(), game.rightPaddle());
 
-        if (GameHasWinner(&game)) {
-            GameProcessWonState(&game);
+        if (game.hasWinner()) {
+            game.processWonState();
         }
 
         EndDrawing();

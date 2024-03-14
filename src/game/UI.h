@@ -10,8 +10,8 @@ class Paddle;
 namespace UI
 {
 void drawGameField();
-void drawScoreBoard(const Paddle* left_paddle, const Paddle* right_paddle);
-void drawWinMessage(const Paddle* p);
+void drawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle);
+void drawWinMessage(const Paddle& p);
 void drawResetMessage();
 } // namespace UI
 

@@ -16,7 +16,7 @@ public:
     void draw() const;
     void processMovement();
     void checkBorderCollision();
-    void checkPaddleCollision(const Paddle *p);
+    void checkPaddleCollision(const Paddle& p);
 
     [[nodiscard]] raylib::Vector2 position() const
     {
