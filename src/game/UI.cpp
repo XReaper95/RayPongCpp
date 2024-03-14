@@ -3,84 +3,85 @@
 //
 
 #include "UI.h"
+#include "Paddle.h"
 
-#include <stdio.h>
+#include "raylib-cpp.hpp"
 
-void UIDrawGameField()
+#include <format>
+
+void UI::drawGameField()
 {
-    const Color fieldColor = LIGHTGRAY;
+    const raylib::Color field_color = LIGHTGRAY;
 
     // middle ring
-    const Vector2 center = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
-    const float innerRadius = 165.0f;
-    const float outerRadius = 175.0f;
+    const Vector2 center = {static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2};
+    constexpr float inner_radius = 165.0f;
+    constexpr float outer_radius = 175.0f;
+    constexpr float start_angle = 0.0f;
+    constexpr float end_angle = 360.0f;
+    constexpr int segments = 0;
+    DrawRing(center, inner_radius, outer_radius, start_angle, end_angle, segments, field_color);
 
-    const float startAngle = 0.0f;
-    const float endAngle = 360.0f;
-    const int segments = 0;
-    DrawRing(center, innerRadius, outerRadius, startAngle, endAngle, segments, fieldColor);
-
-    const int linesThickness = 10;
+    constexpr int lines_thickness = 10;
 
     // middle circle
-    DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 10, fieldColor);
+    DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 10, field_color);
 
     // middle line
-    DrawRectangle(GetScreenWidth() / 2 - linesThickness / 2, 0, 10, GetScreenHeight(), fieldColor);
+    DrawRectangle(GetScreenWidth() / 2 - lines_thickness / 2, 0, 10, GetScreenHeight(), field_color);
 
     // top line
-    DrawRectangle(0, 0, GetScreenWidth(), linesThickness, fieldColor);
+    DrawRectangle(0, 0, GetScreenWidth(), lines_thickness, field_color);
 
     // bottom line
-    DrawRectangle(0, GetScreenHeight() - linesThickness, GetScreenWidth(), linesThickness, fieldColor);
+    DrawRectangle(0, GetScreenHeight() - lines_thickness, GetScreenWidth(), lines_thickness, field_color);
 
     // left line
-    DrawRectangle(0, 0, linesThickness, GetScreenHeight(), Fade(BLUE, 0.4f));
+    DrawRectangle(0, 0, lines_thickness, GetScreenHeight(), Fade(BLUE, 0.4f));
 
     // right line
-    DrawRectangle(GetScreenWidth() - linesThickness, 0, linesThickness, GetScreenHeight(), Fade(RED, 0.4f));
+    DrawRectangle(GetScreenWidth() - lines_thickness, 0, lines_thickness, GetScreenHeight(), Fade(RED, 0.4f));
 }
 
-void UIDrawScoreBoard(const Paddle *leftPaddle, const Paddle *rightPaddle)
+void UI::drawScoreBoard(const Paddle *left_paddle, const Paddle *right_paddle)
 {
-    char scoreAsText[2];
-    const int playerNameFontSize = 29;
-    const int scoreFontSize = 60;
+    constexpr int player_name_font_size = 29;
+    constexpr int score_font_size = 60;
 
     // right side
-    DrawText(leftPaddle->name().c_str(), 75, 50, playerNameFontSize, Fade(BLUE, 0.4f));
+    DrawText(left_paddle->name().c_str(), 75, 50, player_name_font_size, Fade(BLUE, 0.4f));
 
-    snprintf(scoreAsText, 2, "%d", leftPaddle->score());
-    DrawText(scoreAsText, 110, 80, scoreFontSize, Fade(BLUE, 0.4f));
+    std::string score_as_text = std::format("{}", left_paddle->score());
+    DrawText(score_as_text.c_str(), 110, 80, score_font_size, Fade(BLUE, 0.4f));
 
     // left side
     DrawText(
-        rightPaddle->name().c_str(),
-        GetScreenWidth() - MeasureText(rightPaddle->name().c_str(), playerNameFontSize) - 75,
+        right_paddle->name().c_str(),
+        GetScreenWidth() - MeasureText(right_paddle->name().c_str(), player_name_font_size) - 75,
         50,
-        playerNameFontSize,
+        player_name_font_size,
         Fade(RED, 0.4f));
 
-    snprintf(scoreAsText, 2, "%d", rightPaddle->score());
+    score_as_text = std::format("{}", right_paddle->score());
     DrawText(
-        scoreAsText,
-        GetScreenWidth() - MeasureText(scoreAsText, scoreFontSize) - 110,
+        score_as_text.c_str(),
+        GetScreenWidth() - MeasureText(score_as_text.c_str(), score_font_size) - 110,
         80,
-        scoreFontSize,
+        score_font_size,
         Fade(RED, 0.4f));
 }
 
-void UIDrawWinMessage(const Paddle *p)
+void UI::drawWinMessage(const Paddle *p)
 {
     DrawText(
-        TextFormat("Player \"%s\" won!!!", p->name().c_str()),
+        std::format("Player \"{}\" won!!!", p->name()).c_str(),
         110,
         GetScreenHeight() / 3,
         50,
         Fade(p->color(), 0.55f));
 }
 
-void UIDrawResetMessage()
+void UI::drawResetMessage()
 {
     DrawText("Press SPACE to reset game or ESCAPE to exit", 40, 400, 30, Fade(WHITE, 0.55f));
 }

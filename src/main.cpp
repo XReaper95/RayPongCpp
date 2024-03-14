@@ -55,7 +55,7 @@ int main() {
                        WHITE);
         EndShaderMode();
 
-        UIDrawScoreBoard(&game.leftPaddle, &game.rightPaddle);
+        UI::drawScoreBoard(&game.leftPaddle, &game.rightPaddle);
 
         if (GameHasWinner(&game)) {
             GameProcessWonState(&game);

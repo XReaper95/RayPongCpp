@@ -5,14 +5,14 @@
 #ifndef RAY_PONG_C_SRC_SYSTEM_UI_H_
 #define RAY_PONG_C_SRC_SYSTEM_UI_H_
 
-#include "Paddle.h"
+class Paddle;
 
-void UIDrawGameField();
+namespace UI
+{
+void drawGameField();
+void drawScoreBoard(const Paddle* left_paddle, const Paddle* right_paddle);
+void drawWinMessage(const Paddle* p);
+void drawResetMessage();
+} // namespace UI
 
-void UIDrawScoreBoard(const Paddle *leftPaddle, const Paddle *rightPaddle);
-
-void UIDrawWinMessage(const Paddle *p);
-
-void UIDrawResetMessage();
-
-#endif //RAY_PONG_C_SRC_SYSTEM_UI_H_
+#endif // RAY_PONG_C_SRC_SYSTEM_UI_H_

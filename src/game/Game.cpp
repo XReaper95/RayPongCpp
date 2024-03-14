@@ -94,7 +94,7 @@ void GameProcessEvents(Game *game)
 
 void GameDraw(const Game *game)
 {
-    UIDrawGameField();
+    UI::drawGameField();
 
     game->leftPaddle.draw();
     game->rightPaddle.draw();
@@ -122,8 +122,8 @@ void GameProcessWonState(Game *game)
         p = &game->rightPaddle;
     }
 
-    UIDrawWinMessage(p);
-    UIDrawResetMessage();
+    UI::drawWinMessage(p);
+    UI::drawResetMessage();
 }
 
 bool GameHasWinner(const Game *game)
