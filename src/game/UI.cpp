@@ -2,7 +2,7 @@
 // Created by Luis on 19/04/2021.
 //
 
-#include "ui.h"
+#include "UI.h"
 
 #include <stdio.h>
 
@@ -48,20 +48,20 @@ void UIDrawScoreBoard(const Paddle *leftPaddle, const Paddle *rightPaddle)
     const int scoreFontSize = 60;
 
     // right side
-    DrawText(leftPaddle->m_name().c_str(), 75, 50, playerNameFontSize, Fade(BLUE, 0.4f));
+    DrawText(leftPaddle->name().c_str(), 75, 50, playerNameFontSize, Fade(BLUE, 0.4f));
 
-    snprintf(scoreAsText, 2, "%d", leftPaddle->m_score());
+    snprintf(scoreAsText, 2, "%d", leftPaddle->score());
     DrawText(scoreAsText, 110, 80, scoreFontSize, Fade(BLUE, 0.4f));
 
     // left side
     DrawText(
-        rightPaddle->m_name().c_str(),
-        GetScreenWidth() - MeasureText(rightPaddle->m_name().c_str(), playerNameFontSize) - 75,
+        rightPaddle->name().c_str(),
+        GetScreenWidth() - MeasureText(rightPaddle->name().c_str(), playerNameFontSize) - 75,
         50,
         playerNameFontSize,
         Fade(RED, 0.4f));
 
-    snprintf(scoreAsText, 2, "%d", rightPaddle->m_score());
+    snprintf(scoreAsText, 2, "%d", rightPaddle->score());
     DrawText(
         scoreAsText,
         GetScreenWidth() - MeasureText(scoreAsText, scoreFontSize) - 110,
@@ -73,11 +73,11 @@ void UIDrawScoreBoard(const Paddle *leftPaddle, const Paddle *rightPaddle)
 void UIDrawWinMessage(const Paddle *p)
 {
     DrawText(
-        TextFormat("Player \"%s\" won!!!", p->m_name().c_str()),
+        TextFormat("Player \"%s\" won!!!", p->name().c_str()),
         110,
         GetScreenHeight() / 3,
         50,
-        Fade(p->m_color(), 0.55f));
+        Fade(p->color(), 0.55f));
 }
 
 void UIDrawResetMessage()

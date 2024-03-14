@@ -4,13 +4,13 @@
 
 #include "game.h"
 #include "SoundManager.h"
-#include "ui.h"
+#include "UI.h"
 
 #define GAME_MAX_POINTS 5
 
 static bool CheckWinner(const Paddle *p)
 {
-    if (p->m_score() >= GAME_MAX_POINTS)
+    if (p->score() >= GAME_MAX_POINTS)
     {
         SoundManager::instance()->playGameWon();
         return true;
@@ -23,16 +23,16 @@ static void ResetGame(Game *game)
 {
     game->winner = nullptr;
     game->ball = Ball();
-    game->leftPaddle.Reset();
-    game->rightPaddle.Reset();
+    game->leftPaddle.reset();
+    game->rightPaddle.reset();
     SoundManager::instance()->stopScore();
     SoundManager::instance()->stopGameWon();
 }
 
 static void UpdateScore(Game *game)
 {
-    const float ballX = game->ball.m_position().x;
-    const float ballRadius = game->ball.m_radius();
+    const float ballX = game->ball.position().x;
+    const float ballRadius = game->ball.radius();
     const auto screenW = static_cast<float>(GetScreenWidth());
     bool scored = false;
 
@@ -40,7 +40,7 @@ static void UpdateScore(Game *game)
     if (ballX < 0 - ballRadius - 30)
     {
         scored = true;
-        game->rightPaddle.UpdateScore();
+        game->rightPaddle.updateScore();
         if (CheckWinner(&game->rightPaddle))
         {
             game->winner = &game->rightPaddle;
@@ -51,7 +51,7 @@ static void UpdateScore(Game *game)
     if (ballX > screenW + ballRadius + 30)
     {
         scored = true;
-        game->leftPaddle.UpdateScore();
+        game->leftPaddle.updateScore();
         if (CheckWinner(&game->leftPaddle))
         {
             game->winner = &game->leftPaddle;
@@ -76,18 +76,18 @@ Game GameCreate()
 
 void GameProcessEvents(Game *game)
 {
-    game->leftPaddle.ProcessInput();
-    game->rightPaddle.ProcessInput();
+    game->leftPaddle.processInput();
+    game->rightPaddle.processInput();
 
-    game->ball.CheckBorderCollision();
+    game->ball.checkBorderCollision();
 
-    if (!game->ball.m_collide_with_paddle_enabled())
+    if (!game->ball.collideWithPPaddleEnabled())
     {
-        game->ball.CheckPaddleCollision(&game->leftPaddle);
-        game->ball.CheckPaddleCollision(&game->rightPaddle);
+        game->ball.checkPaddleCollision(&game->leftPaddle);
+        game->ball.checkPaddleCollision(&game->rightPaddle);
     }
 
-    game->ball.ProcessMovement();
+    game->ball.processMovement();
 
     UpdateScore(game);
 }
@@ -96,9 +96,9 @@ void GameDraw(const Game *game)
 {
     UIDrawGameField();
 
-    game->leftPaddle.Draw();
-    game->rightPaddle.Draw();
-    game->ball.Draw();
+    game->leftPaddle.draw();
+    game->rightPaddle.draw();
+    game->ball.draw();
 }
 
 void GameReset(Game *game)

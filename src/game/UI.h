@@ -5,7 +5,7 @@
 #ifndef RAY_PONG_C_SRC_SYSTEM_UI_H_
 #define RAY_PONG_C_SRC_SYSTEM_UI_H_
 
-#include "paddle.h"
+#include "Paddle.h"
 
 void UIDrawGameField();
 

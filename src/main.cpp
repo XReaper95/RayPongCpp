@@ -1,17 +1,14 @@
 #include "game/SoundManager.h"
+#include "game/UI.h"
 #include "game/game.h"
-#include "game/ui.h"
 #include "raylib.h"
-#include "game/game.h"
-#include "game/ui.h"
-#include "game/sounds.h"
 
 int main() {
     // CONFIGURATION
-    static const int screenWidth = 800;
-    static const int screenHeight = 600;
-    static const int targetFPS = 60;
-    const char *windowsTitle = "Pong with Raylib";
+    constexpr int screenWidth = 800;
+    constexpr int screenHeight = 600;
+    constexpr int targetFPS = 60;
+    const auto windowsTitle = "Pong with Raylib";
 
     // INITIALIZATION
     SetTraceLogLevel(LOG_INFO);
