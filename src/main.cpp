@@ -16,7 +16,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, windowsTitle);
     SetTargetFPS(targetFPS); // Set desired framerate (frames-per-second)
     InitAudioDevice();
-    SoundManager::instance(); // load all the sounds
+    SoundManager::Instance(); // load all the sounds
 
     // SHADERS
     const RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
@@ -32,10 +32,10 @@ int main() {
         SetWindowTitle(TextFormat("%s FPS - %d", windowsTitle, GetFPS()));
 
         // EVENTS
-        if (!game.hasWinner()) {
-            game.processEvents();
+        if (!game.HasWinner()) {
+            game.ProcessEvents();
         } else {
-            game.reset();
+            game.Reset();
         }
 
         ClearBackground(backgroundColor);
@@ -44,7 +44,7 @@ int main() {
         BeginDrawing();
         BeginTextureMode(target);
         ClearBackground(backgroundColor);
-        game.draw();
+        game.Draw();
         EndTextureMode();
 
 
@@ -55,10 +55,10 @@ int main() {
                        WHITE);
         EndShaderMode();
 
-        UI::drawScoreBoard(game.leftPaddle(), game.rightPaddle());
+        ui::DrawScoreBoard(game.GetLeftPaddle(), game.GetRightPaddle());
 
-        if (game.hasWinner()) {
-            game.processWonState();
+        if (game.HasWinner()) {
+            game.ProcessWonState();
         }
 
         EndDrawing();

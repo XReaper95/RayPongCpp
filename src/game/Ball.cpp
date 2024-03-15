@@ -3,15 +3,16 @@
 //
 
 #include "Ball.h"
+#include "Paddle.h"
 #include "SoundManager.h"
 
 #include <algorithm>
 
 namespace
 {
-constexpr int forwardArcAngle = 110;
-constexpr float fixedBallRadius = 15.0f;
-constexpr float fixedBallSpeedFactor = 530.0;
+constexpr int kForwardArcAngle = 110;
+constexpr float kFixedBallRadius = 15.0f;
+constexpr float kFixedBallSpeedFactor = 530.0;
 
 float DegreesToRadians(const float angle)
 {
@@ -21,7 +22,7 @@ float DegreesToRadians(const float angle)
 float GetInitialRandomAngle()
 {
     int angle;
-    constexpr int half_forward_arc = forwardArcAngle / 2;
+    constexpr int half_forward_arc = kForwardArcAngle / 2;
 
     if (GetRandomValue(0, 1) == 0)
     {
@@ -38,24 +39,24 @@ float GetInitialRandomAngle()
 
 Ball::Ball()
     : m_Position{static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2},
-      m_Radius{fixedBallRadius},
+      m_Radius{kFixedBallRadius},
       m_Color{YELLOW}
 {
     const float initialAngle = GetInitialRandomAngle();
-    m_Velocity = Vector2{fixedBallSpeedFactor * cos(initialAngle), fixedBallSpeedFactor * sin(initialAngle)};
+    m_Velocity = Vector2{kFixedBallSpeedFactor * cos(initialAngle), kFixedBallSpeedFactor * sin(initialAngle)};
 }
 
-void Ball::draw() const
+void Ball::Draw() const
 {
     DrawCircleV(m_Position, m_Radius, m_Color);
 }
 
-void Ball::processMovement()
+void Ball::ProcessMovement()
 {
     if (IsKeyPressed(KEY_SPACE) && m_Frozen)
     {
-        SoundManager::instance()->stopScore();
-        SoundManager::instance()->playWhistle();
+        SoundManager::Instance()->StopScore();
+        SoundManager::Instance()->PlayWhistle();
         m_Frozen = false;
     }
 
@@ -65,19 +66,19 @@ void Ball::processMovement()
 
         if (m_ScreenEdgeCollision)
         {
-            SoundManager::instance()->playBorderHit();
+            SoundManager::Instance()->PlayBorderHit();
             m_Velocity.y *= -1.0f;
             m_ScreenEdgeCollision = false;
         }
         if (m_PaddleSideCollision)
         {
-            SoundManager::instance()->playPaddleHit();
+            SoundManager::Instance()->PlayPaddleHit();
             m_Velocity.x *= -1.0f;
             m_PaddleSideCollision = false;
         }
         if (m_PaddleTBCollision)
         {
-            SoundManager::instance()->playPaddleHit();
+            SoundManager::Instance()->PlayPaddleHit();
             m_Velocity.y *= -1.0f;
             m_PaddleTBCollision = false;
             m_CollideWithPaddleEnabled = true;
@@ -87,7 +88,7 @@ void Ball::processMovement()
     }
 }
 
-void Ball::checkBorderCollision()
+void Ball::CheckBorderCollision()
 {
     const double delta_velocity_y = m_Velocity.y * GetFrameTime();
 
@@ -104,16 +105,16 @@ void Ball::checkBorderCollision()
     }
 }
 
-void Ball::checkPaddleCollision(const Paddle& p)
+void Ball::CheckPaddleCollision(const Paddle& p)
 {
     const raylib::Vector2 delta_velocity{m_Velocity.x * GetFrameTime(), m_Velocity.y * GetFrameTime()};
 
     const float ball_x = m_Position.x + delta_velocity.x;
     const float ball_y = m_Position.y + delta_velocity.y;
-    const float paddle_left_side = p.position().x;
-    const float paddle_right_side = p.position().x + p.size().x;
-    const float paddle_top_side = p.position().y;
-    const float paddle_bottom_side = p.position().y + p.size().y;
+    const float paddle_left_side = p.GetPosition().x;
+    const float paddle_right_side = p.GetPosition().x + p.GetSize().x;
+    const float paddle_top_side = p.GetPosition().y;
+    const float paddle_bottom_side = p.GetPosition().y + p.GetSize().y;
 
     const float test_x = std::clamp(ball_x, paddle_left_side, paddle_right_side);
     const float test_y = std::clamp(ball_y, paddle_top_side, paddle_bottom_side);

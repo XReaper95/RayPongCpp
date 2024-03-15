@@ -5,9 +5,7 @@
 #ifndef RAYLIB_C_SRC_PLAYER_H_
 #define RAYLIB_C_SRC_PLAYER_H_
 
-#include "raylib.h"
-#include <Color.hpp>
-#include <Vector2.hpp>
+#include "raylib-cpp.hpp"
 
 #include <string>
 
@@ -16,36 +14,36 @@ class Paddle
 public:
     Paddle(std::string_view name, raylib::Color color, bool is_left_paddle);
 
-    void reset();
-    void updateScore();
-    void draw() const;
-    void processInput();
+    void Reset();
+    void UpdateScore();
+    void Draw() const;
+    void ProcessInput();
 
 private:
     std::string m_Name;
 
 public:
-    [[nodiscard]] const raylib::Vector2& position() const
+    [[nodiscard]] const raylib::Vector2& GetPosition() const
     {
         return m_Position;
     }
 
-    [[nodiscard]] const raylib::Vector2& size() const
+    [[nodiscard]] const raylib::Vector2& GetSize() const
     {
         return m_Size;
     }
 
-    [[nodiscard]] const std::string& name() const
+    [[nodiscard]] const std::string& Name() const
     {
         return m_Name;
     }
 
-    [[nodiscard]] const raylib::Color& color() const
+    [[nodiscard]] const raylib::Color& Color() const
     {
         return m_Color;
     }
 
-    [[nodiscard]] int score() const
+    [[nodiscard]] int Score() const
     {
         return m_Score;
     }

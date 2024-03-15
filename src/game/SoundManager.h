@@ -1,25 +1,25 @@
 //
 // Created by Luis on 22/04/2021.
 //
-
 #ifndef RAY_PONG_C_SRC_SYSTEM_SOUNDS_H_
 #define RAY_PONG_C_SRC_SYSTEM_SOUNDS_H_
-#include <Sound.hpp>
+
+#include "raylib-cpp.hpp"
 
 class SoundManager
 {
 public:
     SoundManager(SoundManager& other) = delete;
     void operator=(const SoundManager& rhs) = delete;
-    static SoundManager* instance();
+    static SoundManager* Instance();
 
-    void playWhistle();
-    void playPaddleHit();
-    void playBorderHit();
-    void playGameWon();
-    void playScore();
-    void stopScore();
-    void stopGameWon();
+    void PlayWhistle();
+    void PlayPaddleHit();
+    void PlayBorderHit();
+    void PlayGameWon();
+    void PlayScore();
+    void StopScore();
+    void StopGameWon();
 
 private:
     SoundManager();

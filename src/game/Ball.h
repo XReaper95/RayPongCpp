@@ -5,30 +5,31 @@
 #ifndef RAY_PONG_C_SRC_ENTITIES_BALL_H_
 #define RAY_PONG_C_SRC_ENTITIES_BALL_H_
 
-#include "Paddle.h"
 #include "raylib-cpp.hpp"
+
+class Paddle;
 
 class Ball
 {
 public:
     Ball();
 
-    void draw() const;
-    void processMovement();
-    void checkBorderCollision();
-    void checkPaddleCollision(const Paddle& p);
+    void Draw() const;
+    void ProcessMovement();
+    void CheckBorderCollision();
+    void CheckPaddleCollision(const Paddle& p);
 
-    [[nodiscard]] raylib::Vector2 position() const
+    [[nodiscard]] raylib::Vector2 GetPosition() const
     {
         return m_Position;
     }
 
-    [[nodiscard]] float radius() const
+    [[nodiscard]] float GetRadius() const
     {
         return m_Radius;
     }
 
-    [[nodiscard]] bool collideWithPPaddleEnabled() const
+    [[nodiscard]] bool IsCollisionWithPaddleEnabled() const
     {
         return m_CollideWithPaddleEnabled;
     }

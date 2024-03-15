@@ -25,7 +25,7 @@ SoundManager::SoundManager()
 
 SoundManager* SoundManager::s_Instance = nullptr;
 
-SoundManager* SoundManager::instance()
+SoundManager* SoundManager::Instance()
 {
     if (s_Instance == nullptr)
     {
@@ -34,37 +34,37 @@ SoundManager* SoundManager::instance()
     return s_Instance;
 }
 
-void SoundManager::playWhistle()
+void SoundManager::PlayWhistle()
 {
     m_StartWhistle.Play();
 }
 
-void SoundManager::playPaddleHit()
+void SoundManager::PlayPaddleHit()
 {
     m_PaddleHit.Play();
 }
 
-void SoundManager::playBorderHit()
+void SoundManager::PlayBorderHit()
 {
     m_BorderHit.Play();
 }
 
-void SoundManager::playGameWon()
+void SoundManager::PlayGameWon()
 {
     m_GameWon.Play();
 }
 
-void SoundManager::playScore()
+void SoundManager::PlayScore()
 {
     m_Score.Play();
 }
 
-void SoundManager::stopScore()
+void SoundManager::StopScore()
 {
     m_Score.Stop();
 }
 
-void SoundManager::stopGameWon()
+void SoundManager::StopGameWon()
 {
     m_GameWon.Stop();
 }

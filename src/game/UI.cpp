@@ -9,7 +9,7 @@
 
 #include <format>
 
-void UI::drawGameField()
+void ui::DrawGameField()
 {
     const raylib::Color field_color = LIGHTGRAY;
 
@@ -43,26 +43,26 @@ void UI::drawGameField()
     DrawRectangle(GetScreenWidth() - lines_thickness, 0, lines_thickness, GetScreenHeight(), Fade(RED, 0.4f));
 }
 
-void UI::drawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle)
+void ui::DrawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle)
 {
     constexpr int player_name_font_size = 29;
     constexpr int score_font_size = 60;
 
     // right side
-    DrawText(left_paddle.name().c_str(), 75, 50, player_name_font_size, Fade(BLUE, 0.4f));
+    DrawText(left_paddle.Name().c_str(), 75, 50, player_name_font_size, Fade(BLUE, 0.4f));
 
-    std::string score_as_text = std::format("{}", left_paddle.score());
+    std::string score_as_text = std::format("{}", left_paddle.Score());
     DrawText(score_as_text.c_str(), 110, 80, score_font_size, Fade(BLUE, 0.4f));
 
     // left side
     DrawText(
-        right_paddle.name().c_str(),
-        GetScreenWidth() - MeasureText(right_paddle.name().c_str(), player_name_font_size) - 75,
+        right_paddle.Name().c_str(),
+        GetScreenWidth() - MeasureText(right_paddle.Name().c_str(), player_name_font_size) - 75,
         50,
         player_name_font_size,
         Fade(RED, 0.4f));
 
-    score_as_text = std::format("{}", right_paddle.score());
+    score_as_text = std::format("{}", right_paddle.Score());
     DrawText(
         score_as_text.c_str(),
         GetScreenWidth() - MeasureText(score_as_text.c_str(), score_font_size) - 110,
@@ -71,17 +71,17 @@ void UI::drawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle)
         Fade(RED, 0.4f));
 }
 
-void UI::drawWinMessage(const Paddle& p)
+void ui::DrawWinMessage(const Paddle& p)
 {
     DrawText(
-        std::format("Player \"{}\" won!!!", p.name()).c_str(),
+        std::format("Player \"{}\" won!!!", p.Name()).c_str(),
         110,
         GetScreenHeight() / 3,
         50,
-        Fade(p.color(), 0.55f));
+        Fade(p.Color(), 0.55f));
 }
 
-void UI::drawResetMessage()
+void ui::DrawResetMessage()
 {
     DrawText("Press SPACE to reset game or ESCAPE to exit", 40, 400, 30, Fade(WHITE, 0.55f));
 }

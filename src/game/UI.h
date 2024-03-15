@@ -7,12 +7,12 @@
 
 class Paddle;
 
-namespace UI
+namespace ui
 {
-void drawGameField();
-void drawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle);
-void drawWinMessage(const Paddle& p);
-void drawResetMessage();
+void DrawGameField();
+void DrawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle);
+void DrawWinMessage(const Paddle& p);
+void DrawResetMessage();
 } // namespace UI
 
 #endif // RAY_PONG_C_SRC_SYSTEM_UI_H_

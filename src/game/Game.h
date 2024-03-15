@@ -13,27 +13,27 @@ class Game
 public:
     Game();
 
-    void processEvents();
-    void processWonState() const;
-    void draw() const;
-    void reset();
+    void ProcessEvents();
+    void ProcessWonState() const;
+    void Draw() const;
+    void Reset();
 
-    [[nodiscard]] bool hasWinner() const;
+    [[nodiscard]] bool HasWinner() const;
 
-    [[nodiscard]] const Paddle& leftPaddle() const
+    [[nodiscard]] const Paddle& GetLeftPaddle() const
     {
         return m_LeftPaddle;
     }
 
-    [[nodiscard]] const Paddle& rightPaddle() const
+    [[nodiscard]] const Paddle& GetRightPaddle() const
     {
         return m_RightPaddle;
     }
 
 private:
-    void updateScore();
-    void resetGame();
-    void checkWinner(const Paddle& p);
+    void UpdateScore();
+    void ResetGame();
+    void CheckWinner(const Paddle& p);
 
     Paddle m_LeftPaddle;
     Paddle m_RightPaddle;
