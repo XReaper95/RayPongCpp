@@ -1,73 +1,71 @@
 #include "game/Game.h"
 #include "game/SoundManager.h"
 #include "game/UI.h"
-#include "raylib.h"
 
-int main() {
+#include "raylib-cpp.hpp"
+
+#include <format>
+
+int main()
+{
     // CONFIGURATION
-    constexpr int screenWidth = 800;
-    constexpr int screenHeight = 600;
-    constexpr int targetFPS = 60;
-    const auto windowsTitle = "Pong with Raylib";
+    constexpr int kScreenWidth = 800;
+    constexpr int kScreenHeight = 600;
+    constexpr int kTargetFps = 60;
+    const auto kWindowsTitle = "Pong with Raylib and C++";
 
     // INITIALIZATION
     SetTraceLogLevel(LOG_INFO);
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(screenWidth, screenHeight, windowsTitle);
-    SetTargetFPS(targetFPS); // Set desired framerate (frames-per-second)
-    InitAudioDevice();
-    SoundManager::Instance(); // load all the sounds
+
+    auto window = raylib::Window{kScreenWidth, kScreenHeight, kWindowsTitle, FLAG_MSAA_4X_HINT};
+    window.SetTargetFPS(kTargetFps);
+
+    // load all the sounds, Note: loading the sounds and instantiating the singleton
+    // should be two separate operations but since there is no resource manager just let it be
+    SoundManager::Instance();
 
     // SHADERS
-    const RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
-    const Shader shader = LoadShader(0, "resources/crt.fs");
-    const Color backgroundColor = ColorFromHSV(207, 0.47f, 0.15f);
+    raylib::RenderTexture2D render_target{kScreenWidth, kScreenHeight};
+    raylib::Shader shader{nullptr, "resources/crt.fs"};
+    const auto background_color{raylib::Color::FromHSV(207, 0.47f, 0.15f)};
 
-    auto game = Game();
-
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    Game game;
+    //
+    // // Main game loop
+    while (!window.ShouldClose()) // Detect window close button or ESC key
     {
         // UPDATE
-        SetWindowTitle(TextFormat("%s FPS - %d", windowsTitle, GetFPS()));
+        window.SetTitle(std::format("{} FPS - {}", kWindowsTitle, window.GetFPS()));
 
-        // EVENTS
-        if (!game.HasWinner()) {
+        if (!game.HasWinner())
+        {
             game.ProcessEvents();
-        } else {
+        }
+        else
+        {
             game.Reset();
         }
 
-        ClearBackground(backgroundColor);
-
         // DRAW
-        BeginDrawing();
-        BeginTextureMode(target);
-        ClearBackground(backgroundColor);
+        window.BeginDrawing();
+        render_target.BeginMode();
+        window.ClearBackground(background_color);
         game.Draw();
-        EndTextureMode();
+        render_target.EndMode();
 
-
-        BeginShaderMode(shader);
-        DrawTextureRec(target.texture,
-                       (Rectangle) {0, 0, (float) target.texture.width, (float) -target.texture.height},
-                       (Vector2) {0, 0},
-                       WHITE);
-        EndShaderMode();
+        shader.BeginMode();
+        render_target.GetTexture().Draw(0, 0, WHITE);
+        shader.EndMode();
 
         ui::DrawScoreBoard(game.GetLeftPaddle(), game.GetRightPaddle());
 
-        if (game.HasWinner()) {
+        if (game.HasWinner())
+        {
             game.ProcessWonState();
         }
 
-        EndDrawing();
+        window.EndDrawing();
     }
-
-    // DE-INITIALIZATION
-    CloseAudioDevice();
-    UnloadRenderTexture(target);
-    CloseWindow();
 
     return 0;
 }

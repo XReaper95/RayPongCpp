@@ -25,6 +25,8 @@ private:
     SoundManager();
     static SoundManager* s_Instance;
 
+    raylib::AudioDevice m_AudioDevice;
+
     raylib::Sound m_StartWhistle;
     raylib::Sound m_PaddleHit;
     raylib::Sound m_BorderHit;

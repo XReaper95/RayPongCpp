@@ -6,7 +6,7 @@
 #include "SoundManager.h"
 #include "UI.h"
 
-constexpr int kMaxGamePoints = 5;
+constexpr int kMaxGamePoints = 1;
 
 Game::Game()
     : m_LeftPaddle{"Player 1", BLUE, true},

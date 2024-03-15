@@ -14,7 +14,7 @@ void ui::DrawGameField()
     const raylib::Color field_color = LIGHTGRAY;
 
     // middle ring
-    const Vector2 center = {static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2};
+    const raylib::Vector2 center = {static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2};
     constexpr float inner_radius = 165.0f;
     constexpr float outer_radius = 175.0f;
     constexpr float start_angle = 0.0f;
@@ -49,26 +49,26 @@ void ui::DrawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle)
     constexpr int score_font_size = 60;
 
     // right side
-    DrawText(left_paddle.Name().c_str(), 75, 50, player_name_font_size, Fade(BLUE, 0.4f));
+    raylib::DrawText(left_paddle.Name(), 75, 50, player_name_font_size, Fade(BLUE, 0.4f));
 
     std::string score_as_text = std::format("{}", left_paddle.Score());
-    DrawText(score_as_text.c_str(), 110, 80, score_font_size, Fade(BLUE, 0.4f));
+    raylib::DrawText(score_as_text, 110, 80, score_font_size, Fade(BLUE, 0.4f));
 
     // left side
-    DrawText(
-        right_paddle.Name().c_str(),
-        GetScreenWidth() - MeasureText(right_paddle.Name().c_str(), player_name_font_size) - 75,
+    raylib::DrawText(
+        right_paddle.Name(),
+        GetScreenWidth() - raylib::MeasureText(right_paddle.Name(), player_name_font_size) - 75,
         50,
         player_name_font_size,
         Fade(RED, 0.4f));
 
     score_as_text = std::format("{}", right_paddle.Score());
-    DrawText(
-        score_as_text.c_str(),
-        GetScreenWidth() - MeasureText(score_as_text.c_str(), score_font_size) - 110,
+    raylib::DrawText(
+        score_as_text,
+        GetScreenWidth() - raylib::MeasureText(score_as_text, score_font_size) - 110,
         80,
         score_font_size,
-        Fade(RED, 0.4f));
+        raylib::Color::Red().Fade(0.4f));
 }
 
 void ui::DrawWinMessage(const Paddle& p)
@@ -78,7 +78,7 @@ void ui::DrawWinMessage(const Paddle& p)
         110,
         GetScreenHeight() / 3,
         50,
-        Fade(p.Color(), 0.55f));
+        p.Color().Fade(0.55f));
 }
 
 void ui::DrawResetMessage()
