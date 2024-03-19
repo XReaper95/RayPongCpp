@@ -30,8 +30,8 @@ int main()
     const auto background_color{raylib::Color::FromHSV(207, 0.47f, 0.15f)};
 
     Game game;
-    //
-    // // Main game loop
+
+    // Main game loop TODO refactor this to make the logic easier to follow
     while (!window.ShouldClose()) // Detect window close button or ESC key
     {
         // UPDATE
@@ -46,19 +46,21 @@ int main()
             game.Reset();
         }
 
-        // DRAW
         window.BeginDrawing();
+        // draw the game to a texture framebuffer
         render_target.BeginMode();
         window.ClearBackground(background_color);
         game.Draw();
         render_target.EndMode();
 
+        // draw the game with the overlay CTR shader
         shader.BeginMode();
         render_target.GetTexture().Draw(0, 0, WHITE);
         shader.EndMode();
 
         ui::DrawScoreBoard(game.GetLeftPaddle(), game.GetRightPaddle());
 
+        // this needs to be here because it draws to the screen TODO refactor
         if (game.HasWinner())
         {
             game.ProcessWonState();
