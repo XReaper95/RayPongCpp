@@ -39,12 +39,15 @@ void Paddle::Draw() const
 
 void Paddle::ProcessInput()
 {
-    if (IsKeyDown(m_KeyUp) && m_Position.y > 0.0f)
-    { // UP
+    // UP
+    if (IsKeyDown(m_KeyUp) && m_Position.y + m_Size.y < static_cast<float>(GetScreenHeight()))
+    {
         m_Position.y += kPaddleMovementFactor * GetFrameTime();
     }
-    if (IsKeyDown(m_KeyDown) && m_Position.y + m_Size.y < static_cast<float>(GetScreenHeight()))
-    { // Down
+
+    // Down
+    if (IsKeyDown(m_KeyDown) && m_Position.y > 0.0f )
+    {
         m_Position.y -= kPaddleMovementFactor * GetFrameTime();
     }
 }
