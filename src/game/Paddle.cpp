@@ -41,11 +41,11 @@ void Paddle::ProcessInput()
 {
     if (IsKeyDown(m_KeyUp) && m_Position.y > 0.0f)
     { // UP
-        m_Position.y -= kPaddleMovementFactor * GetFrameTime();
+        m_Position.y += kPaddleMovementFactor * GetFrameTime();
     }
     if (IsKeyDown(m_KeyDown) && m_Position.y + m_Size.y < static_cast<float>(GetScreenHeight()))
     { // Down
-        m_Position.y += kPaddleMovementFactor * GetFrameTime();
+        m_Position.y -= kPaddleMovementFactor * GetFrameTime();
     }
 }
 

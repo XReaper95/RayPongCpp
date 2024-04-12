@@ -3,6 +3,7 @@ set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
 set(BUILD_GAMES OFF CACHE BOOL "" FORCE) # don't build the supplied games
 set(CUSTOMIZE_BUILD ON CACHE BOOL "" FORCE) # allow customizing the build
 set(SUPPORT_FILEFORMAT_MOD OFF CACHE BOOL "" FORCE) # disable MOD file support
+set(SUPPORT_FILEFORMAT_JPG ON CACHE BOOL "" FORCE) # disable MOD file support
 add_subdirectory(raylib-5.0 EXCLUDE_FROM_ALL)  # should be called before other "raylib-*" dependencies
 ############## Raylib-END ##############
 

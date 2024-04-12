@@ -26,16 +26,36 @@ int main()
 
     // SHADERS
     raylib::RenderTexture2D render_target{kScreenWidth, kScreenHeight};
-    raylib::Shader shader{nullptr, "resources/crt.fs"};
+
+    raylib::Shader loop_hero_shader{nullptr, "resources/loop_hero_crt.frag"};
+    const int screenSizeUniformLoc = loop_hero_shader.GetLocation("screenSize");
+    constexpr float kScreenSize[2] = { static_cast<float>(kScreenHeight) /2, static_cast<float>(kScreenHeight) /2 };
+    loop_hero_shader.SetValue(screenSizeUniformLoc, kScreenSize, SHADER_UNIFORM_VEC2);
+
+    raylib::Shader crt_shader{nullptr, "resources/crt.frag"};
+
     const auto background_color{raylib::Color::FromHSV(207, 0.47f, 0.15f)};
 
     Game game;
+    window.SetMonitor(0);
+
+    raylib::Shader* shader = &loop_hero_shader;
 
     // Main game loop TODO refactor this to make the logic easier to follow
     while (!window.ShouldClose()) // Detect window close button or ESC key
     {
         // UPDATE
         window.SetTitle(std::format("{} FPS - {}", kWindowsTitle, window.GetFPS()));
+
+        // swap the shader
+        if (IsKeyDown(KEY_ONE))
+        {
+            shader = &loop_hero_shader;
+        }
+        else if (IsKeyDown(KEY_TWO))
+        {
+            shader = &crt_shader;
+        }
 
         if (!game.HasWinner())
         {
@@ -54,9 +74,9 @@ int main()
         render_target.EndMode();
 
         // draw the game with the overlay CTR shader
-        shader.BeginMode();
+        shader->BeginMode();
         render_target.GetTexture().Draw(0, 0, WHITE);
-        shader.EndMode();
+        shader->EndMode();
 
         ui::DrawScoreBoard(game.GetLeftPaddle(), game.GetRightPaddle());
 
