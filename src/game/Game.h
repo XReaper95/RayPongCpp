@@ -18,14 +18,14 @@ public:
     void Draw() const;
     void Reset();
 
-    [[nodiscard]] bool HasWinner() const;
+    bool HasWinner() const;
 
-    [[nodiscard]] const Paddle& GetLeftPaddle() const
+    const Paddle& GetLeftPaddle() const
     {
         return m_LeftPaddle;
     }
 
-    [[nodiscard]] const Paddle& GetRightPaddle() const
+    const Paddle& GetRightPaddle() const
     {
         return m_RightPaddle;
     }

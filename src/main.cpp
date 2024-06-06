@@ -6,14 +6,14 @@
 
 #include <format>
 
+// CONFIGURATION
+constexpr int kScreenWidth = 800;
+constexpr int kScreenHeight = 600;
+constexpr int kTargetFps = 60;
+constexpr auto kWindowsTitle = "Pong with Raylib and C++";
+
 int main()
 {
-    // CONFIGURATION
-    constexpr int kScreenWidth = 800;
-    constexpr int kScreenHeight = 600;
-    constexpr int kTargetFps = 60;
-    const auto kWindowsTitle = "Pong with Raylib and C++";
-
     // INITIALIZATION
     SetTraceLogLevel(LOG_INFO);
 
@@ -28,9 +28,9 @@ int main()
     raylib::RenderTexture2D render_target{kScreenWidth, kScreenHeight};
 
     raylib::Shader loop_hero_shader{nullptr, "resources/loop_hero_crt.frag"};
-    const int screenSizeUniformLoc = loop_hero_shader.GetLocation("screenSize");
-    constexpr float kScreenSize[2] = { static_cast<float>(kScreenHeight) /2, static_cast<float>(kScreenHeight) /2 };
-    loop_hero_shader.SetValue(screenSizeUniformLoc, kScreenSize, SHADER_UNIFORM_VEC2);
+    const int screen_size_uniform_loc = loop_hero_shader.GetLocation("screenSize");
+    constexpr float screen_size[2] = { static_cast<float>(kScreenHeight) /2, static_cast<float>(kScreenHeight) /2 };
+    loop_hero_shader.SetValue(screen_size_uniform_loc, screen_size, SHADER_UNIFORM_VEC2);
 
     raylib::Shader crt_shader{nullptr, "resources/crt.frag"};
 

@@ -23,27 +23,27 @@ private:
     std::string m_Name;
 
 public:
-    [[nodiscard]] const raylib::Vector2& GetPosition() const
+    const raylib::Vector2& GetPosition() const
     {
         return m_Position;
     }
 
-    [[nodiscard]] const raylib::Vector2& GetSize() const
+    const raylib::Vector2& GetSize() const
     {
         return m_Size;
     }
 
-    [[nodiscard]] const std::string& Name() const
+    const std::string& Name() const
     {
         return m_Name;
     }
 
-    [[nodiscard]] const raylib::Color& Color() const
+    const raylib::Color& Color() const
     {
         return m_Color;
     }
 
-    [[nodiscard]] int Score() const
+    int Score() const
     {
         return m_Score;
     }

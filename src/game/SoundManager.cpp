@@ -7,7 +7,7 @@
 namespace
 {
 
-raylib::Sound loadSoundResource(const char* path)
+raylib::Sound LoadSoundResource(const char* path)
 {
     return {(TextFormat("resources/%s", path))};
 }
@@ -15,11 +15,11 @@ raylib::Sound loadSoundResource(const char* path)
 } // namespace
 
 SoundManager::SoundManager()
-    : m_StartWhistle{loadSoundResource("whistle.wav")},
-      m_PaddleHit{loadSoundResource("wood_hit.wav")},
-      m_BorderHit{loadSoundResource("rubber_hit.wav")},
-      m_Score{loadSoundResource("coin_in_machine.wav")},
-      m_GameWon{loadSoundResource("clapping.wav")}
+    : m_StartWhistle{LoadSoundResource("whistle.wav")},
+      m_PaddleHit{LoadSoundResource("wood_hit.wav")},
+      m_BorderHit{LoadSoundResource("rubber_hit.wav")},
+      m_Score{LoadSoundResource("coin_in_machine.wav")},
+      m_GameWon{LoadSoundResource("clapping.wav")}
 {
 }
 

@@ -42,8 +42,8 @@ Ball::Ball()
       m_Radius{kFixedBallRadius},
       m_Color{YELLOW}
 {
-    const float initialAngle = GetInitialRandomAngle();
-    m_Velocity = Vector2{kFixedBallSpeedFactor * cos(initialAngle), kFixedBallSpeedFactor * sin(initialAngle)};
+    const float initial_angle = GetInitialRandomAngle();
+    m_Velocity = Vector2{kFixedBallSpeedFactor * cos(initial_angle), kFixedBallSpeedFactor * sin(initial_angle)};
 }
 
 void Ball::Draw() const

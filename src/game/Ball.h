@@ -19,17 +19,17 @@ public:
     void CheckBorderCollision();
     void CheckPaddleCollision(const Paddle& p);
 
-    [[nodiscard]] raylib::Vector2 GetPosition() const
+    raylib::Vector2 GetPosition() const
     {
         return m_Position;
     }
 
-    [[nodiscard]] float GetRadius() const
+    float GetRadius() const
     {
         return m_Radius;
     }
 
-    [[nodiscard]] bool IsCollisionWithPaddleEnabled() const
+    bool IsCollisionWithPaddleEnabled() const
     {
         return m_CollideWithPaddleEnabled;
     }
