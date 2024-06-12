@@ -19,31 +19,31 @@ public:
     void CheckBorderCollision();
     void CheckPaddleCollision(const Paddle& p);
 
-    raylib::Vector2 GetPosition() const
+    const raylib::Vector2& GetPosition() const
     {
-        return m_Position;
+        return m_position;
     }
 
     float GetRadius() const
     {
-        return m_Radius;
+        return m_radius;
     }
 
     bool IsCollisionWithPaddleEnabled() const
     {
-        return m_CollideWithPaddleEnabled;
+        return m_collideWithPaddleEnabled;
     }
 
 private:
-    raylib::Vector2 m_Position;
-    float m_Radius;
-    raylib::Color m_Color;
-    raylib::Vector2 m_Velocity;
-    bool m_Frozen = true;
-    bool m_ScreenEdgeCollision = false;
-    bool m_PaddleSideCollision = false;
-    bool m_PaddleTBCollision = false;
-    bool m_CollideWithPaddleEnabled = false;
+    raylib::Vector2 m_position;
+    float m_radius;
+    raylib::Color m_color;
+    raylib::Vector2 m_velocity;
+    bool m_frozen = true;
+    bool m_screenEdgeCollision = false;
+    bool m_paddleSideCollision = false;
+    bool m_paddleTbCollision = false;
+    bool m_collideWithPaddleEnabled = false;
 };
 
 #endif // RAY_PONG_C_SRC_ENTITIES_BALL_H_

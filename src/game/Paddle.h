@@ -12,7 +12,7 @@
 class Paddle
 {
 public:
-    Paddle(std::string_view name, raylib::Color color, bool is_left_paddle);
+    Paddle(std::string_view name, raylib::Color color, bool isLeftPaddle);
 
     void Reset();
     void UpdateScore();
@@ -20,41 +20,41 @@ public:
     void ProcessInput();
 
 private:
-    std::string m_Name;
+    std::string m_name;
 
 public:
     const raylib::Vector2& GetPosition() const
     {
-        return m_Position;
+        return m_position;
     }
 
     const raylib::Vector2& GetSize() const
     {
-        return m_Size;
+        return m_size;
     }
 
     const std::string& Name() const
     {
-        return m_Name;
+        return m_name;
     }
 
     const raylib::Color& Color() const
     {
-        return m_Color;
+        return m_color;
     }
 
     int Score() const
     {
-        return m_Score;
+        return m_score;
     }
 
 private:
-    raylib::Vector2 m_Position;
-    const raylib::Vector2 m_Size;
-    const raylib::Color m_Color;
-    int m_Score;
-    const KeyboardKey m_KeyUp;
-    const KeyboardKey m_KeyDown;
+    raylib::Vector2 m_position;
+    const raylib::Vector2 m_size;
+    const raylib::Color m_color;
+    int m_score;
+    const KeyboardKey m_keyUp;
+    const KeyboardKey m_keyDown;
 };
 
 #endif // RAYLIB_C_SRC_PLAYER_H_

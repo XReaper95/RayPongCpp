@@ -12,47 +12,47 @@ constexpr float kPaddleWidthMargin = 15.0f;
 constexpr float kPaddleMovementFactor = 300.0f;
 } // namespace
 
-Paddle::Paddle(const std::string_view name, const raylib::Color color, const bool is_left_paddle)
-    : m_Name{name},
-      m_Size{kPaddleFixedWidth, kPaddleFixedHeight},
-      m_Color{color},
-      m_Score{0},
-      m_KeyUp{is_left_paddle ? KEY_W : KEY_I},
-      m_KeyDown{is_left_paddle ? KEY_S : KEY_K}
+Paddle::Paddle(const std::string_view name, const raylib::Color color, const bool isLeftPaddle)
+    : m_name{name},
+      m_size{kPaddleFixedWidth, kPaddleFixedHeight},
+      m_color{color},
+      m_score{0},
+      m_keyUp{isLeftPaddle ? KEY_W : KEY_I},
+      m_keyDown{isLeftPaddle ? KEY_S : KEY_K}
 {
-    m_Position = Vector2{
-        is_left_paddle ? kPaddleWidthMargin
+    m_position = Vector2{
+        isLeftPaddle ? kPaddleWidthMargin
                        : static_cast<float>(GetScreenWidth()) - kPaddleWidthMargin - kPaddleFixedWidth,
         static_cast<float>(GetScreenHeight()) / 2 - kPaddleFixedHeight / 2};
 }
 
 void Paddle::Reset()
 {
-    m_Position.y = static_cast<float>(GetScreenHeight()) / 2 - kPaddleFixedHeight / 2;
-    m_Score = 0;
+    m_position.y = static_cast<float>(GetScreenHeight()) / 2 - kPaddleFixedHeight / 2;
+    m_score = 0;
 }
 
 void Paddle::Draw() const
 {
-    DrawRectangleV(m_Position, m_Size, m_Color);
+    DrawRectangleV(m_position, m_size, m_color);
 }
 
 void Paddle::ProcessInput()
 {
     // UP
-    if (IsKeyDown(m_KeyUp) && m_Position.y + m_Size.y < static_cast<float>(GetScreenHeight()))
+    if (IsKeyDown(m_keyUp) && m_position.y + m_size.y < static_cast<float>(GetScreenHeight()))
     {
-        m_Position.y += kPaddleMovementFactor * GetFrameTime();
+        m_position.y += kPaddleMovementFactor * GetFrameTime();
     }
 
     // Down
-    if (IsKeyDown(m_KeyDown) && m_Position.y > 0.0f )
+    if (IsKeyDown(m_keyDown) && m_position.y > 0.0f )
     {
-        m_Position.y -= kPaddleMovementFactor * GetFrameTime();
+        m_position.y -= kPaddleMovementFactor * GetFrameTime();
     }
 }
 
 void Paddle::UpdateScore()
 {
-    m_Score++;
+    m_score++;
 }

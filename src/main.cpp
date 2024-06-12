@@ -25,21 +25,21 @@ int main()
     SoundManager::Instance();
 
     // SHADERS
-    raylib::RenderTexture2D render_target{kScreenWidth, kScreenHeight};
+    raylib::RenderTexture2D renderTarget{kScreenWidth, kScreenHeight};
 
-    raylib::Shader loop_hero_shader{nullptr, "resources/loop_hero_crt.frag"};
-    const int screen_size_uniform_loc = loop_hero_shader.GetLocation("screenSize");
-    constexpr float screen_size[2] = { static_cast<float>(kScreenHeight) /2, static_cast<float>(kScreenHeight) /2 };
-    loop_hero_shader.SetValue(screen_size_uniform_loc, screen_size, SHADER_UNIFORM_VEC2);
+    raylib::Shader loopHeroShader{nullptr, "resources/loop_hero_crt.frag"};
+    const int screenSizeUniformLoc = loopHeroShader.GetLocation("screenSize");
+    constexpr float screenSize[2] = { static_cast<float>(kScreenHeight) /2, static_cast<float>(kScreenHeight) /2 };
+    loopHeroShader.SetValue(screenSizeUniformLoc, screenSize, SHADER_UNIFORM_VEC2);
 
-    raylib::Shader crt_shader{nullptr, "resources/crt.frag"};
+    raylib::Shader crtShader{nullptr, "resources/crt.frag"};
 
-    const auto background_color{raylib::Color::FromHSV(207, 0.47f, 0.15f)};
+    const auto backgroundColor{raylib::Color::FromHSV(207, 0.47f, 0.15f)};
 
     Game game;
     window.SetMonitor(0);
 
-    raylib::Shader* shader = &loop_hero_shader;
+    raylib::Shader* shader = &loopHeroShader;
 
     // Main game loop TODO refactor this to make the logic easier to follow
     while (!window.ShouldClose()) // Detect window close button or ESC key
@@ -50,11 +50,11 @@ int main()
         // swap the shader
         if (IsKeyDown(KEY_ONE))
         {
-            shader = &loop_hero_shader;
+            shader = &loopHeroShader;
         }
         else if (IsKeyDown(KEY_TWO))
         {
-            shader = &crt_shader;
+            shader = &crtShader;
         }
 
         if (!game.HasWinner())
@@ -68,14 +68,14 @@ int main()
 
         window.BeginDrawing();
         // draw the game to a texture framebuffer
-        render_target.BeginMode();
-        window.ClearBackground(background_color);
+        renderTarget.BeginMode();
+        window.ClearBackground(backgroundColor);
         game.Draw();
-        render_target.EndMode();
+        renderTarget.EndMode();
 
         // draw the game with the overlay CTR shader
         shader->BeginMode();
-        render_target.GetTexture().Draw(0, 0, WHITE);
+        renderTarget.GetTexture().Draw(0, 0, WHITE);
         shader->EndMode();
 
         ui::DrawScoreBoard(game.GetLeftPaddle(), game.GetRightPaddle());

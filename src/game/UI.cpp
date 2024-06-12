@@ -11,63 +11,63 @@
 
 void ui::DrawGameField()
 {
-    const raylib::Color field_color = LIGHTGRAY;
+    const raylib::Color fieldColor = LIGHTGRAY;
 
     // middle ring
     const raylib::Vector2 center = {static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2};
-    constexpr float inner_radius = 165.0f;
-    constexpr float outer_radius = 175.0f;
-    constexpr float start_angle = 0.0f;
-    constexpr float end_angle = 360.0f;
+    constexpr float innerRadius = 165.0f;
+    constexpr float outerRadius = 175.0f;
+    constexpr float startAngle = 0.0f;
+    constexpr float endAngle = 360.0f;
     constexpr int segments = 0;
-    DrawRing(center, inner_radius, outer_radius, start_angle, end_angle, segments, field_color);
+    DrawRing(center, innerRadius, outerRadius, startAngle, endAngle, segments, fieldColor);
 
-    constexpr int lines_thickness = 10;
+    constexpr int linesThickness = 10;
 
     // middle circle
-    DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 10, field_color);
+    DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 10, fieldColor);
 
     // middle line
-    DrawRectangle(GetScreenWidth() / 2 - lines_thickness / 2, 0, 10, GetScreenHeight(), field_color);
+    DrawRectangle(GetScreenWidth() / 2 - linesThickness / 2, 0, 10, GetScreenHeight(), fieldColor);
 
     // top line
-    DrawRectangle(0, 0, GetScreenWidth(), lines_thickness, field_color);
+    DrawRectangle(0, 0, GetScreenWidth(), linesThickness, fieldColor);
 
     // bottom line
-    DrawRectangle(0, GetScreenHeight() - lines_thickness, GetScreenWidth(), lines_thickness, field_color);
+    DrawRectangle(0, GetScreenHeight() - linesThickness, GetScreenWidth(), linesThickness, fieldColor);
 
     // left line
-    DrawRectangle(0, 0, lines_thickness, GetScreenHeight(), Fade(BLUE, 0.4f));
+    DrawRectangle(0, 0, linesThickness, GetScreenHeight(), Fade(BLUE, 0.4f));
 
     // right line
-    DrawRectangle(GetScreenWidth() - lines_thickness, 0, lines_thickness, GetScreenHeight(), Fade(RED, 0.4f));
+    DrawRectangle(GetScreenWidth() - linesThickness, 0, linesThickness, GetScreenHeight(), Fade(RED, 0.4f));
 }
 
-void ui::DrawScoreBoard(const Paddle& left_paddle, const Paddle& right_paddle)
+void ui::DrawScoreBoard(const Paddle& leftPaddle, const Paddle& rightPaddle)
 {
-    constexpr int player_name_font_size = 29;
-    constexpr int score_font_size = 60;
+    constexpr int playerNameFontSize = 29;
+    constexpr int scoreFontSize = 60;
 
     // right side
-    raylib::DrawText(left_paddle.Name(), 75, 50, player_name_font_size, Fade(BLUE, 0.4f));
+    raylib::DrawText(leftPaddle.Name(), 75, 50, playerNameFontSize, Fade(BLUE, 0.4f));
 
-    std::string score_as_text = std::format("{}", left_paddle.Score());
-    raylib::DrawText(score_as_text, 110, 80, score_font_size, Fade(BLUE, 0.4f));
+    std::string scoreAsText = std::format("{}", leftPaddle.Score());
+    raylib::DrawText(scoreAsText, 110, 80, scoreFontSize, Fade(BLUE, 0.4f));
 
     // left side
     raylib::DrawText(
-        right_paddle.Name(),
-        GetScreenWidth() - raylib::MeasureText(right_paddle.Name(), player_name_font_size) - 75,
+        rightPaddle.Name(),
+        GetScreenWidth() - raylib::MeasureText(rightPaddle.Name(), playerNameFontSize) - 75,
         50,
-        player_name_font_size,
+        playerNameFontSize,
         Fade(RED, 0.4f));
 
-    score_as_text = std::format("{}", right_paddle.Score());
+    scoreAsText = std::format("{}", rightPaddle.Score());
     raylib::DrawText(
-        score_as_text,
-        GetScreenWidth() - raylib::MeasureText(score_as_text, score_font_size) - 110,
+        scoreAsText,
+        GetScreenWidth() - raylib::MeasureText(scoreAsText, scoreFontSize) - 110,
         80,
-        score_font_size,
+        scoreFontSize,
         raylib::Color::Red().Fade(0.4f));
 }
 

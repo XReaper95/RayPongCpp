@@ -15,56 +15,56 @@ raylib::Sound LoadSoundResource(const char* path)
 } // namespace
 
 SoundManager::SoundManager()
-    : m_StartWhistle{LoadSoundResource("whistle.wav")},
-      m_PaddleHit{LoadSoundResource("wood_hit.wav")},
-      m_BorderHit{LoadSoundResource("rubber_hit.wav")},
-      m_Score{LoadSoundResource("coin_in_machine.wav")},
-      m_GameWon{LoadSoundResource("clapping.wav")}
+    : m_startWhistle{LoadSoundResource("whistle.wav")},
+      m_paddleHit{LoadSoundResource("wood_hit.wav")},
+      m_borderHit{LoadSoundResource("rubber_hit.wav")},
+      m_score{LoadSoundResource("coin_in_machine.wav")},
+      m_gameWon{LoadSoundResource("clapping.wav")}
 {
 }
 
-SoundManager* SoundManager::s_Instance = nullptr;
+SoundManager* SoundManager::s_instance = nullptr;
 
 SoundManager* SoundManager::Instance()
 {
-    if (s_Instance == nullptr)
+    if (s_instance == nullptr)
     {
-        s_Instance = new SoundManager();
+        s_instance = new SoundManager();
     }
-    return s_Instance;
+    return s_instance;
 }
 
 void SoundManager::PlayWhistle()
 {
-    m_StartWhistle.Play();
+    m_startWhistle.Play();
 }
 
 void SoundManager::PlayPaddleHit()
 {
-    m_PaddleHit.Play();
+    m_paddleHit.Play();
 }
 
 void SoundManager::PlayBorderHit()
 {
-    m_BorderHit.Play();
+    m_borderHit.Play();
 }
 
 void SoundManager::PlayGameWon()
 {
-    m_GameWon.Play();
+    m_gameWon.Play();
 }
 
 void SoundManager::PlayScore()
 {
-    m_Score.Play();
+    m_score.Play();
 }
 
 void SoundManager::StopScore()
 {
-    m_Score.Stop();
+    m_score.Stop();
 }
 
 void SoundManager::StopGameWon()
 {
-    m_GameWon.Stop();
+    m_gameWon.Stop();
 }

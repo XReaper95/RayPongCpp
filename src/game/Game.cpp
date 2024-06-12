@@ -9,49 +9,49 @@
 constexpr int kMaxGamePoints = 1;
 
 Game::Game()
-    : m_LeftPaddle{"Player 1", BLUE, true},
-      m_RightPaddle{"Player 2", RED, false}
+    : m_leftPaddle{"Player 1", BLUE, true},
+      m_rightPaddle{"Player 2", RED, false}
 {
 }
 
 void Game::ResetGame()
 {
-    m_Winner = nullptr;
-    m_Ball = Ball();
-    m_LeftPaddle.Reset();
-    m_RightPaddle.Reset();
+    m_winner = nullptr;
+    m_ball = Ball();
+    m_leftPaddle.Reset();
+    m_rightPaddle.Reset();
     SoundManager::Instance()->StopScore();
     SoundManager::Instance()->StopGameWon();
 }
 
 void Game::UpdateScore()
 {
-    const float ball_x = m_Ball.GetPosition().x;
-    const float ball_radius = m_Ball.GetRadius();
-    const auto screen_w = static_cast<float>(GetScreenWidth());
+    const float ballX = m_ball.GetPosition().x;
+    const float ballRadius = m_ball.GetRadius();
+    const auto screenW = static_cast<float>(GetScreenWidth());
     bool scored = false;
 
     // right score
-    if (ball_x < 0 - ball_radius - 30)
+    if (ballX < 0 - ballRadius - 30)
     {
         scored = true;
-        m_RightPaddle.UpdateScore();
-        CheckWinner(m_RightPaddle);
+        m_rightPaddle.UpdateScore();
+        CheckWinner(m_rightPaddle);
     }
 
     // left score
-    if (ball_x > screen_w + ball_radius + 30)
+    if (ballX > screenW + ballRadius + 30)
     {
         scored = true;
-        m_LeftPaddle.UpdateScore();
-        CheckWinner(m_LeftPaddle);
+        m_leftPaddle.UpdateScore();
+        CheckWinner(m_leftPaddle);
     }
 
     // reset ball position
     if (scored)
     {
         SoundManager::Instance()->PlayScore();
-        m_Ball = Ball();
+        m_ball = Ball();
     }
 }
 
@@ -59,25 +59,25 @@ void Game::CheckWinner(const Paddle& p)
 {
     if (p.Score() >= kMaxGamePoints)
     {
-        m_Winner = &p;
+        m_winner = &p;
         SoundManager::Instance()->PlayGameWon();
     }
 }
 
 void Game::ProcessEvents()
 {
-    m_LeftPaddle.ProcessInput();
-    m_RightPaddle.ProcessInput();
+    m_leftPaddle.ProcessInput();
+    m_rightPaddle.ProcessInput();
 
-    m_Ball.CheckBorderCollision();
+    m_ball.CheckBorderCollision();
 
-    if (!m_Ball.IsCollisionWithPaddleEnabled())
+    if (!m_ball.IsCollisionWithPaddleEnabled())
     {
-        m_Ball.CheckPaddleCollision(m_LeftPaddle);
-        m_Ball.CheckPaddleCollision(m_RightPaddle);
+        m_ball.CheckPaddleCollision(m_leftPaddle);
+        m_ball.CheckPaddleCollision(m_rightPaddle);
     }
 
-    m_Ball.ProcessMovement();
+    m_ball.ProcessMovement();
 
     UpdateScore();
 }
@@ -86,9 +86,9 @@ void Game::Draw() const
 {
     ui::DrawGameField();
 
-    m_LeftPaddle.Draw();
-    m_RightPaddle.Draw();
-    m_Ball.Draw();
+    m_leftPaddle.Draw();
+    m_rightPaddle.Draw();
+    m_ball.Draw();
 }
 
 void Game::Reset()
@@ -101,7 +101,7 @@ void Game::Reset()
 
 void Game::ProcessWonState() const
 {
-    const Paddle& p = m_Winner == &m_LeftPaddle ? m_LeftPaddle : m_RightPaddle;
+    const Paddle& p = m_winner == &m_leftPaddle ? m_leftPaddle : m_rightPaddle;
 
     ui::DrawWinMessage(p);
     ui::DrawResetMessage();
@@ -109,5 +109,5 @@ void Game::ProcessWonState() const
 
 bool Game::HasWinner() const
 {
-    return m_Winner != nullptr;
+    return m_winner != nullptr;
 }

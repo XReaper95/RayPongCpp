@@ -22,12 +22,12 @@ public:
 
     const Paddle& GetLeftPaddle() const
     {
-        return m_LeftPaddle;
+        return m_leftPaddle;
     }
 
     const Paddle& GetRightPaddle() const
     {
-        return m_RightPaddle;
+        return m_rightPaddle;
     }
 
 private:
@@ -35,10 +35,10 @@ private:
     void ResetGame();
     void CheckWinner(const Paddle& p);
 
-    Paddle m_LeftPaddle;
-    Paddle m_RightPaddle;
-    Ball m_Ball;
-    const Paddle* m_Winner = nullptr;
+    Paddle m_leftPaddle;
+    Paddle m_rightPaddle;
+    Ball m_ball;
+    const Paddle* m_winner = nullptr;
 };
 
 #endif // RAY_PONG_C_SRC_SYSTEM_GAME_H_

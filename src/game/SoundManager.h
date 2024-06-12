@@ -23,15 +23,15 @@ public:
 
 private:
     SoundManager();
-    static SoundManager* s_Instance;
+    static SoundManager* s_instance;
 
-    raylib::AudioDevice m_AudioDevice;
+    raylib::AudioDevice m_audioDevice;
 
-    raylib::Sound m_StartWhistle;
-    raylib::Sound m_PaddleHit;
-    raylib::Sound m_BorderHit;
-    raylib::Sound m_Score;
-    raylib::Sound m_GameWon;
+    raylib::Sound m_startWhistle;
+    raylib::Sound m_paddleHit;
+    raylib::Sound m_borderHit;
+    raylib::Sound m_score;
+    raylib::Sound m_gameWon;
 };
 
 #endif // RAY_PONG_C_SRC_SYSTEM_SOUNDS_H_
